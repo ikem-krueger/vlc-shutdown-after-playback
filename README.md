@@ -6,7 +6,7 @@ The VLC Media Player does not have a built-in option to automatically standby th
 
 I modified his script to go into standby instead to shutdown.
 
-The script is written and compiled for Windows OS using Autoit3: https://www.autoitscript.com
+The script is written and compiled for Windows OS using [https://www.autoitscript.com](Autoit3).
 
 ## Instructions:
 
