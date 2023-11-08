@@ -6,7 +6,7 @@ This PowerShell script uses a watcher process to check when a movie is over/play
 
 ## Usage
 
-Run ´bootstrapper.ps1´ and then start VLC.
+Run `bootstrapper.ps1` and then start VLC.
 
 Now each time your movie/playlist ends, a pop-up will show on your screen, warning you that your PC will go into standby in 20 seconds.
 
