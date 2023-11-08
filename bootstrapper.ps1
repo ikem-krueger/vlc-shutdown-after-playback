@@ -36,7 +36,7 @@ $TIMEOUT = 20 # seconds
 $MB_ICONINFORMATION = 0x40
 $MB_YESNO = 0x4
 $MB_TITLE = "Standby in progress"
-$MB_TEXT = "This PC is going into standby in $TIMEOUT seconds.`n`nDo you want to continue using the PC?"
+$MB_TEXT = "This PC is going into standby in $TIMEOUT seconds.`n`nDo you want to abort this action?"
 
 $IDYES = 6
 
