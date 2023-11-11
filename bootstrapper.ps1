@@ -49,55 +49,56 @@ Function Trigger-Standby {
 }
 
 Function Main {
-    $VlcProcess = $Null
+    $vlcProcess = $Null
 
-    $WasIdle = $False
-    $WasPlaying = $False
+    $previousState = ""
+    $actualState = ""
 
-    While($True) {
+    While($true) {
         Start-Sleep -Milliseconds 1000
 
         try {
-            $VlcProcess = Get-Process -Name "vlc" -ErrorAction Stop
+            # Running
+            $vlcProcess = Get-Process -Name "vlc" -ErrorAction Stop
+
+            If($vlcProcess.mainWindowTitle -match ".+VLC media player") {
+                $actualState = "Playing"
+            }
+
+            If($vlcProcess.mainWindowTitle -eq "VLC media player") {
+                $actualState = "Idle"
+            }
         } catch [Microsoft.PowerShell.Commands.ProcessCommandException] {
-            Write-Host "Waiting for VLC..."
-
-            continue
+            # Closed
+            break
         }
 
-        # Idle
-        If ($VlcProcess.mainWindowTitle -eq "VLC media player") {
-            Write-Host "Idle..."
+        If($previousState -eq "Playing" -and $actualState -eq "Idle") {
+            $choice = [NativeFunctions]::MessageBoxTimeout([NativeFunctions]::GetForegroundWindow(), $MB_TEXT, $MB_TITLE, $MB_ICONINFORMATION -bor $MB_YESNO, 0, $TIMEOUT * 1000)
 
-            $WasIdle = $True
-        }
-
-        # Playing
-        If($VlcProcess.mainWindowTitle -match ".+VLC media player") {
-            Write-Host "Playing..."
-
-            $WasPlaying = $True
-
-            continue
-        }
-
-        If ($WasIdle -and $WasPlaying) {
-            $Choice = [NativeFunctions]::MessageBoxTimeout([NativeFunctions]::GetForegroundWindow(), $MB_TEXT, $MB_TITLE, $MB_ICONINFORMATION -bor $MB_YESNO, 0, $TIMEOUT * 1000)
-
-            If ($Choice -eq $IDYES) {
+            If ($choice -eq $IDYES) {
                 break
             }
 
-            Write-Host "Standby..."
+            Write-Host "Close VLC..."
 
             Stop-Process -Name "vlc" -Force
 
+            Write-Host "Trigger standby..."
+
             Trigger-Standby
+        }
+
+        If($previousState -ne $actualState) {
+            Write-Host "State: $actualState"
+
+            $previousState = $actualState
         }
     }
 
     Main
 }
 
-# Call the Main function
+Write-Host "VLC standby"
+
 Main
