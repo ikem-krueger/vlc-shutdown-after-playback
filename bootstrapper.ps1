@@ -49,9 +49,9 @@ Function Close-Player {
 Function Trigger-Standby {
   Add-Type -Assembly System.Windows.Forms
 
-  $State = [System.Windows.Forms.PowerState]::Suspend
+  $state = [System.Windows.Forms.PowerState]::Suspend
 
-  [System.Windows.Forms.Application]::SetSuspendState($State, $False, $False) | Out-Null
+  [System.Windows.Forms.Application]::SetSuspendState($state, $false, $false) | Out-Null
 }
 
 Function Main {
