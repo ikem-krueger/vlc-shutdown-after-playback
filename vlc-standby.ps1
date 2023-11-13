@@ -55,13 +55,19 @@ Function Trigger-Standby {
 }
 
 Function Main {
-    $vlcProcess = $null
-
-    $previousState = ""
-    $actualState = ""
+    $init = $true
 
     While ($true) {
         Start-Sleep -Milliseconds 1000
+
+        If ($init) {
+            $vlcProcess = $null
+
+            $previousState = ""
+            $actualState = ""
+        }
+
+        $init = $false
 
         try {
             # Running
@@ -76,7 +82,7 @@ Function Main {
             }
         } catch [Microsoft.PowerShell.Commands.ProcessCommandException] {
             # Closed
-            Break
+            Continue
         }
 
         If ($previousState -eq "Playing" -and $actualState -eq "Idle") {
@@ -84,7 +90,9 @@ Function Main {
 
             # "If user choose 'Yes'..."
             If ($choice -eq 6) {
-                Break
+                $init = $true
+
+                Continue
             }
 
             Write-Host "Close player..."
@@ -102,8 +110,6 @@ Function Main {
             $previousState = $actualState
         }
     }
-
-    Main
 }
 
 Write-Host "VLC standby"
