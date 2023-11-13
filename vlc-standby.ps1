@@ -14,7 +14,7 @@ Add-Type -TypeDefinition @"
         }
     }
 "@
-[TrayTip]::Show("VLC standby bootstrapper", "The bootstrapper is listening for VLC windows...", 10)
+[TrayTip]::Show("VLC standby", "Waiting for VLC to appear...", 10)
 #>
 
 Add-Type -TypeDefinition @"
